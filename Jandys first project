@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Responsive Auth Form</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(120deg, #2980b9, #6dd5fa);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      width: 350px;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-icon {
+      font-size: 40px;
+      color: #2980b9;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+form {
+      display: none;
+      transition: all 0.5s ease;
+    }
+
+    form.active {
+      display: block;
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 95%;
+      padding: 10px;
+      border: none;
+      background: #2980b9;
+      color: white;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #1e6fa7;
+    }
+
+    .link {
+      color: #2980b9;
+      margin-top: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      display: block;
+    }
+
+    .dashboard {
+      display: none;
+      color: #2c3e50;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="login-icon" onclick="toggleLogin()">🔐</div>
+
+    <form id="loginForm">
+      <h2>Login</h2>
+      <input type="text" id="loginUser" placeholder="Username" required />
+      <input type="password" id="loginPass" placeholder="Password" required />
+<button type="button" onclick="handleLogin()">Login</button>
+      <span class="link" onclick="toggleForm('register')">New here? Create Account</span>
+    </form>
+
+    <form id="registerForm">
+      <h2>Register</h2>
+      <input type="text" id="regUser" placeholder="Username" required />
+      <input type="password" id="regPass" placeholder="Password" required />
+      <button type="button" onclick="handleRegister()">Register</button>
+    </form>
+
+    <div class="dashboard" id="dashboard">
+      <h2>Welcome, <span id="userDisplay"></span>!</h2>
+      <p>This is your dashboard.</p>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const dashboard = document.getElementById('dashboard');
+
+    function toggleLogin() {
+      loginForm.classList.toggle('active');
+      registerForm.classList.remove('active');
+      dashboard.style.display = "none";
+    }
+
+    function toggleForm(form) {
+      if (form === 'register') {
+        registerForm.classList.add('active');
+        loginForm.classList.remove('active');
+      }
+    }
+
+    function handleRegister() {
+      const username = document.getElementById("regUser").value;
+
+const password = document.getElementById("regPass").value;
+      if (username && password) {
+        localStorage.setItem("user", JSON.stringify({ username, password }));
+        alert("Registration successful!");
+        registerForm.classList.remove('active');
+        loginForm.classList.add('active');
+      } else {
+        alert("Please fill all fields.");
+      }
+    }
+
+    function handleLogin() {
+      const userInput = document.getElementById("loginUser").value;
+      const passInput = document.getElementById("loginPass").value;
+      const stored = JSON.parse(localStorage.getItem("user"));
+      if (stored && stored.username === userInput && stored.password === passInput) {
+        document.getElementById("userDisplay").innerText = stored.username;
+        loginForm.classList.remove('active');
+        dashboard.style.display = "block";
+      } else {
+        alert("Invalid credentials.");
+      }
+    }
+
+    function logout() {
+      dashboard.style.display = "none";
+      loginForm.classList.add('active');
+    }
+
+    // Auto-login if data exists
+    window.onload = () => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user) {
+        loginForm.classList.add('active');
+      }
+    };
+  </script>
+</body>
+</html>
+```
+
+---
